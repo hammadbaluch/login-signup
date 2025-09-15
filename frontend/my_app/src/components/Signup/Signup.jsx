@@ -1,55 +1,53 @@
-import React, { useState } from 'react';
-import './SignUp.css';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import "./SignUp.css";
+import { Link } from "react-router-dom";
 
 const SignUp = ({ onSwitchToLogin }) => {
   const [formData, setFormData] = useState({
-    mobileOrEmail: '',
-    password: '',
-    fullName: '',
-    username: ''
+    mobileOrEmail: "",
+    password: "",
+    fullName: "",
+    username: "",
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const response = await fetch('http://localhost:5000/api/auth/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        contact: formData.mobileOrEmail,
-        fullName: formData.fullName,
-        password: formData.password
-      })
-    });
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contact: formData.mobileOrEmail,
+          fullName: formData.fullName,
+          password: formData.password,
+        }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      alert('Signup successful!');
-      console.log('JWT Token:', data.token);
-      // Redirect or save token as needed
-    } else {
-      alert(`Signup failed: ${data.msg}`);
+      if (response.ok) {
+        alert("Signup successful!");
+        localStorage.setItem("token", data.token); // ✅ Save token
+        window.location.href = "/user"; // ✅ Redirect to User page
+      } else {
+        alert(`Signup failed: ${data.msg}`);
+      }
+    } catch (err) {
+      console.error("Signup error:", err);
+      alert("Something went wrong!");
     }
-
-  } catch (err) {
-    console.error('Signup error:', err);
-    alert('Something went wrong!');
-  }
-};
-
+  };
 
   return (
     <div className="signup-container">
@@ -68,8 +66,12 @@ const SignUp = ({ onSwitchToLogin }) => {
 
           {/* Facebook signup */}
           <button className="facebook-signup">
-            <svg className="facebook-signup-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            <svg
+              className="facebook-signup-icon"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
             </svg>
             Log in with Facebook
           </button>
@@ -91,7 +93,7 @@ const SignUp = ({ onSwitchToLogin }) => {
               onChange={handleInputChange}
               className="signup-input"
             />
-            
+
             <input
               type="password"
               name="password"
@@ -122,17 +124,16 @@ const SignUp = ({ onSwitchToLogin }) => {
             {/* Privacy notice */}
             <div className="privacy-notice">
               <p>
-                People who use our service may have uploaded your contact information to Instagram.{' '}
-                <a href="#">Learn more</a>
+                People who use our service may have uploaded your contact
+                information to Instagram. <a href="#">Learn more</a>
               </p>
             </div>
 
             {/* Terms notice */}
             <div className="terms-notice">
               <p>
-                By signing up, you agree to our{' '}
-                <a href="#">Terms</a>,{' '}
-                <a href="#">Privacy Policy</a> and{' '}
+                By signing up, you agree to our <a href="#">Terms</a>,{" "}
+                <a href="#">Privacy Policy</a> and{" "}
                 <a href="#">Cookies Policy</a>.
               </p>
             </div>
@@ -146,8 +147,10 @@ const SignUp = ({ onSwitchToLogin }) => {
         {/* Login card */}
         <div className="login-card-bottom">
           <p>
-            Have an account?{' '}
-            <Link to={'/login'} className="login-link">Log In</Link>
+            Have an account?{" "}
+            <Link to={"/login"} className="login-link">
+              Log In
+            </Link>
           </p>
         </div>
 
@@ -155,12 +158,12 @@ const SignUp = ({ onSwitchToLogin }) => {
         <div className="get-app-signup">
           <p>Get the app.</p>
           <div className="app-buttons-signup">
-            <img 
-              src="https://static.cdninstagram.com/rsrc.php/v3/yz/r/c5Rp7Ym-Klz.png" 
+            <img
+              src="https://static.cdninstagram.com/rsrc.php/v3/yz/r/c5Rp7Ym-Klz.png"
               alt="Get it on Google Play"
             />
-            <img 
-              src="https://static.cdninstagram.com/rsrc.php/v3/yu/r/EHY6QnZYdNX.png" 
+            <img
+              src="https://static.cdninstagram.com/rsrc.php/v3/yu/r/EHY6QnZYdNX.png"
               alt="Get it from Microsoft"
             />
           </div>
