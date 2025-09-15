@@ -22,7 +22,7 @@ const SignUp = ({ onSwitchToLogin }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
+      const response = await fetch("https://login-signup-hammad.up.railway.app/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,7 +56,7 @@ const SignUp = ({ onSwitchToLogin }) => {
         <div className="signup-main-card">
           {/* Instagram logo */}
           <div className="signup-logo">
-            <h1>Instagram</h1>
+            <h1>Hamv5d</h1>
           </div>
 
           {/* Subtitle */}
@@ -148,7 +148,7 @@ const SignUp = ({ onSwitchToLogin }) => {
         <div className="login-card-bottom">
           <p>
             Have an account?{" "}
-            <Link to={"/login"} className="login-link">
+            <Link to={"/"} className="login-link">
               Log In
             </Link>
           </p>

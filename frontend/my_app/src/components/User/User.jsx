@@ -13,7 +13,7 @@ const User = () => {
 
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/user/profile", {
+        const res = await fetch("https://login-signup-hammad.up.railway.app/api/user/profile", {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`,

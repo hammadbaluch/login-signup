@@ -20,7 +20,7 @@ const Login = ({ onSwitchToSignup }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
+      const response = await fetch("https://login-signup-hammad.up.railway.app/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,7 +53,7 @@ const Login = ({ onSwitchToSignup }) => {
         <div className="login-card">
           {/* Instagram logo */}
           <div className="login-logo">
-            <h1>Instagram</h1>
+            <h1>Hamv5d</h1>
           </div>
 
           {/* Login form */}
