@@ -7,8 +7,10 @@ const SignUp = ({ onSwitchToLogin }) => {
     mobileOrEmail: "",
     password: "",
     fullName: "",
-    username: "",
   });
+
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -18,21 +20,51 @@ const SignUp = ({ onSwitchToLogin }) => {
     }));
   };
 
+  const validate = () => {
+    let newErrors = {};
+
+    if (formData.fullName.trim().length < 6) {
+      newErrors.fullName = "Full name must be at least 6 characters.";
+    }
+
+    if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters.";
+    }
+
+    const isEmail = /\S+@\S+\.\S+/.test(formData.mobileOrEmail);
+    const isPhone = /^\+\d{10,15}$/.test(formData.mobileOrEmail); 
+    // starts with + and 10–15 digits
+
+    if (!isEmail && !isPhone) {
+      newErrors.mobileOrEmail =
+        "Enter a valid email or phone number starting with +.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!validate()) return;
+
     try {
-      const response = await fetch("https://login-signup-hammad.up.railway.app/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contact: formData.mobileOrEmail,
-          fullName: formData.fullName,
-          password: formData.password,
-        }),
-      });
+      setLoading(true);
+      const response = await fetch(
+        "https://login-signup-hammad.up.railway.app/api/auth/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            contact: formData.mobileOrEmail,
+            fullName: formData.fullName,
+            password: formData.password,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -46,15 +78,16 @@ const SignUp = ({ onSwitchToLogin }) => {
     } catch (err) {
       console.error("Signup error:", err);
       alert("Something went wrong!");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="signup-container">
       <div className="signup-wrapper">
-        {/* Main signup card */}
         <div className="signup-main-card">
-          {/* Instagram logo */}
+          {/* Logo */}
           <div className="signup-logo">
             <h1>Hamv5d</h1>
           </div>
@@ -64,7 +97,7 @@ const SignUp = ({ onSwitchToLogin }) => {
             <p>Sign up to see photos and videos from your friends.</p>
           </div>
 
-          {/* Facebook signup */}
+          {/* Facebook button */}
           <button className="facebook-signup">
             <svg
               className="facebook-signup-icon"
@@ -93,6 +126,11 @@ const SignUp = ({ onSwitchToLogin }) => {
               onChange={handleInputChange}
               className="signup-input"
             />
+            {errors.mobileOrEmail && (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                {errors.mobileOrEmail}
+              </p>
+            )}
 
             <input
               type="password"
@@ -102,6 +140,11 @@ const SignUp = ({ onSwitchToLogin }) => {
               onChange={handleInputChange}
               className="signup-input"
             />
+            {errors.password && (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                {errors.password}
+              </p>
+            )}
 
             <input
               type="text"
@@ -111,25 +154,21 @@ const SignUp = ({ onSwitchToLogin }) => {
               onChange={handleInputChange}
               className="signup-input"
             />
-
-            {/* <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={formData.username}
-              onChange={handleInputChange}
-              className="signup-input"
-            /> */}
+            {errors.fullName && (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                {errors.fullName}
+              </p>
+            )}
 
             {/* Privacy notice */}
             <div className="privacy-notice">
               <p>
                 People who use our service may have uploaded your contact
-                information to Instagram. <a href="#">Learn more</a>
+                information. <a href="#">Learn more</a>
               </p>
             </div>
 
-            {/* Terms notice */}
+            {/* Terms */}
             <div className="terms-notice">
               <p>
                 By signing up, you agree to our <a href="#">Terms</a>,{" "}
@@ -138,8 +177,8 @@ const SignUp = ({ onSwitchToLogin }) => {
               </p>
             </div>
 
-            <button type="submit" className="signup-button">
-              Sign Up
+            <button type="submit" className="signup-button" disabled={loading}>
+              {loading ? "Signing Up..." : "Sign Up"}
             </button>
           </form>
         </div>
