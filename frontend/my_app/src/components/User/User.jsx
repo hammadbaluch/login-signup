@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const User = () => {
   const [profile, setProfile] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      window.location.href = "/"; // redirect if not logged in
+      navigate("/");
       return;
     }
 
@@ -15,9 +17,7 @@ const User = () => {
       try {
         const res = await fetch("https://login-signup-hammad.up.railway.app/api/user/profile", {
           method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         const data = await res.json();
@@ -27,7 +27,7 @@ const User = () => {
         } else {
           alert(data.msg || "Unauthorized");
           localStorage.removeItem("token");
-          window.location.href = "/login";
+          navigate("/");
         }
       } catch (err) {
         console.error(err);
@@ -35,7 +35,7 @@ const User = () => {
     };
 
     fetchProfile();
-  }, []);
+  }, [navigate]);
 
   return (
     <div style={{ textAlign: "center", marginTop: "50px" }}>
@@ -45,10 +45,10 @@ const User = () => {
           <p><strong>ID:</strong> {profile._id}</p>
           <p><strong>Full Name:</strong> {profile.fullName}</p>
           <p><strong>Contact:</strong> {profile.contact}</p>
-          <button 
+          <button
             onClick={() => {
               localStorage.removeItem("token");
-              window.location.href = "/";
+              navigate("/");
             }}
           >
             Logout
