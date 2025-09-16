@@ -7,7 +7,7 @@ const User = () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      window.location.href = "/login"; // redirect if not logged in
+      window.location.href = "/"; // redirect if not logged in
       return;
     }
 
